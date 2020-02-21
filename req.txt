@@ -25,7 +25,6 @@ MarkupSafe==1.1.1 -i https://pypi.doubanio.com/simple
 mysqlclient==1.4.6 -i https://pypi.doubanio.com/simple
 odfpy==1.4.1 -i https://pypi.doubanio.com/simple
 openpyxl==3.0.3 -i https://pypi.doubanio.com/simple
-Pillow==7.1.0.dev0 -i https://pypi.doubanio.com/simple
 PyJWT==1.7.1 -i https://pypi.doubanio.com/simple
 pytz==2019.3 -i https://pypi.doubanio.com/simple
 PyYAML==5.3 -i https://pypi.doubanio.com/simple
