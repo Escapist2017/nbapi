@@ -31,6 +31,7 @@ class CustomBackend(ModelBackend):
             )
             if user.check_password(password):
                 return user
+            return user # 需要增加一行，不然xadmin有可能上不去
         except Exception as e:
             return None
 

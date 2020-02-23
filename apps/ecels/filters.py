@@ -13,7 +13,7 @@ class CellsLevelFilter(filters.FilterSet):
     """
     共站名过滤类
     """
-    name = filters.CharFilter(name="name", help_text='共站名过滤')
+    name = filters.CharFilter(field_name="name", help_text='共站名过滤')
     class Meta:
         model = CellsLevel
         fields = ['name',]
@@ -22,13 +22,13 @@ class CellsInfoFilter(filters.FilterSet):
     """
     小区信息过滤类
     """
-    common_site_name = filters.CharFilter(name="common_site_name", help_text = '共站名过滤')
-    site_name = filters.CharFilter(name="common_site_name", help_text='基站名过滤')
-    sector = filters.CharFilter(name="sector", help_text='扇区名过滤')
-    cell_name = filters.CharFilter(name="cell_name", help_text='小区名过滤')
-    site_id = filters.CharFilter(name="site_id", help_text='站号过滤')
-    enbid = filters.CharFilter(name="enbid", help_text='eNBID过滤')
-    eci = filters.CharFilter(name="eci", help_text='ECI过滤')
+    common_site_name = filters.CharFilter(field_name="common_site_name", help_text = '共站名过滤')
+    site_name = filters.CharFilter(field_name="common_site_name", help_text='基站名过滤')
+    sector = filters.CharFilter(field_name="sector", help_text='扇区名过滤')
+    cell_name = filters.CharFilter(field_name="cell_name", help_text='小区名过滤')
+    site_id = filters.CharFilter(field_name="site_id", help_text='站号过滤')
+    enbid = filters.CharFilter(field_name="enbid", help_text='eNBID过滤')
+    eci = filters.CharFilter(field_name="eci", help_text='ECI过滤')
 
     class Meta:
         model = CellsInfo
