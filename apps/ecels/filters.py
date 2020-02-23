@@ -6,16 +6,49 @@
 # @notice ：
 
 from django_filters import rest_framework as filters
-from .models import CellsLevel
+from rest_framework.filters import SearchFilter
+from .models import CellsLevel, CellsInfo
 
-class CellsFilter(filters.FilterSet):
+class CellsLevelFilter(filters.FilterSet):
     """
-    商品的过滤类
+    共站名过滤类
     """
-    # 指定字段以及字段上的行为，在shop_price上大于等于
-    # pricemin = filters.NumberFilter(name="shop_price", lookup_expr='gte')
-    # pricemax = filters.NumberFilter(name="shop_price", lookup_expr='lte')
-
+    name = filters.CharFilter(name="name", help_text='共站名过滤')
     class Meta:
         model = CellsLevel
-        fields = ['name']
+        fields = ['name',]
+
+class CellsInfoFilter(filters.FilterSet):
+    """
+    小区信息过滤类
+    """
+    common_site_name = filters.CharFilter(name="common_site_name", help_text = '共站名过滤')
+    site_name = filters.CharFilter(name="common_site_name", help_text='基站名过滤')
+    sector = filters.CharFilter(name="sector", help_text='扇区名过滤')
+    cell_name = filters.CharFilter(name="cell_name", help_text='小区名过滤')
+    site_id = filters.CharFilter(name="site_id", help_text='站号过滤')
+    enbid = filters.CharFilter(name="enbid", help_text='eNBID过滤')
+    eci = filters.CharFilter(name="eci", help_text='ECI过滤')
+
+    class Meta:
+        model = CellsInfo
+        fields = ['common_site_name','site_name', 'sector', 'cell_name', 'site_id', 'enbid', 'eci']
+
+
+class CellsLevelSearchFilter(SearchFilter):
+    """
+    自定义SearchFilter
+    """
+    search_fields = ('name', 'sub_lev__name',
+                     'sub_lev__sub_lev__sub_cells__cell_name',
+                     'sub_lev__sub_lev__sub_cells__enbid',
+                     'sub_lev__sub_lev__sub_cells__eci')  # 实现多级层级查询
+    search_description = ("共站名、基站名、小区名、eNBID、ECI的搜索")
+
+
+class CellsTypeSearchFilter(SearchFilter):
+    """
+    自定义SearchFilter
+    """
+    search_fields = ('name',)
+    search_description = ("共站名、基站名、小区名的模糊搜索")

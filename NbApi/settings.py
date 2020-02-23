@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 import sys
+import datetime
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -27,8 +28,11 @@ SECRET_KEY = 'f0eo-l)-2=d8b&vi4-xu#el)+g$bqwttw4&hj#dfqiknbu7^tq'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
+AUTHENTICATION_BACKENDS = (
+    'users.views.CustomBackend',
+)
 # 此处重载是为了使我们的UserProfile生效
 AUTH_USER_MODEL = "users.UserProfile"
 
@@ -47,6 +51,8 @@ INSTALLED_APPS = [
     'xadmin',
     'rest_framework',
     'django_filters',
+    'corsheaders',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -84,6 +90,8 @@ WSGI_APPLICATION = 'NbApi.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
+# import pymysql # 一定要添加这两行
+# pymysql.install_as_MySQLdb()
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -93,7 +101,7 @@ DATABASES = {
         'HOST': '127.0.0.1',
         'PORT': '3306',
         "OPTIONS": {"init_command": "SET default_storage_engine=INNODB;",
-                    "init_command":"SET foreign_key_checks = 0;", # 取消外键检查
+                    # "init_command":"SET foreign_key_checks = 0;", # 取消外键检查
                     }
     }
 }
@@ -141,3 +149,29 @@ STATIC_URL = '/static/'
 MEDIA_URL = "/media/"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        # 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        # django默认session校验：校验规则 游客 及 登录用户
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        # 'rest_framework.permissions.AllowAny',
+        # 全局配置：一站式网站（所有操作都需要登录后才能访问）
+        # 'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
+}
+
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
+    'JWT_AUTH_HEADER_PREFIX': 'JWT',
+}
+
+# 手机号码正则表达式
+REGEX_MOBILE = "^1[358]\d{9}$|^147\d{8}$|^176\d{8}$"
+
+# 云片网设置
+APIKEY = 'e924998d8cbfeaac406fff1a3731043e'

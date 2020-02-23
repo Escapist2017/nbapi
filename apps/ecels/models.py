@@ -25,7 +25,7 @@ class CellsLevel(models.Model):
 
     class Meta:
         # unique_together = (("name", "code", "level_type", "parent_level"),)
-        verbose_name = "共站分级"
+        verbose_name = "共站树 "
         verbose_name_plural = verbose_name
 
     def __str__(self):

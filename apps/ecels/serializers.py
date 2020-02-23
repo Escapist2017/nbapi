@@ -11,11 +11,16 @@ from .models import CellsLevel, CellsInfo
 class CellsInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = CellsInfo
+        fields = "__all__"
+
+class CellsInfoSerializer2(serializers.ModelSerializer):
+    class Meta:
+        model = CellsInfo
         # fields = "__all__"
         fields = ['city','cell_name','enbid','eci']
 
 class CellsLevelSerializer3(serializers.ModelSerializer):
-    sub_cells = CellsInfoSerializer(many=True)
+    sub_cells = CellsInfoSerializer2(many=True)
     class Meta:
         model = CellsLevel
         # fields = "__all__"
@@ -34,3 +39,9 @@ class CellsLevelSerializer(serializers.ModelSerializer):
         model = CellsLevel
         # fields = "__all__"
         fields = ['name','sub_lev']
+
+class CellsTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CellsLevel
+        # fields = "__all__"
+        fields = ['name', 'level_type']
