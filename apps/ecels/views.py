@@ -4,11 +4,13 @@ from rest_framework import mixins
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets
+from rest_framework import viewsets,generics
 from rest_framework.permissions import IsAuthenticated
 from .models import CellsLevel, CellsInfo
 from .filters import CellsLevelFilter,CellsInfoFilter,CellsLevelSearchFilter,CellsTypeSearchFilter
 from .serializers import CellsLevelSerializer, CellsInfoSerializer, CellsTypeSerializer
+from .mixins import ExportMixin
+from .resources import CellResource
 from utils.permissions import IsOwnerOrReadOnly
 
 class CellsPagination(PageNumberPagination):
@@ -81,3 +83,16 @@ class CellsDetailViewSet(mixins.ListModelMixin,mixins.RetrieveModelMixin,mixins.
     filter_backends = (DjangoFilterBackend, )
     filter_class = CellsInfoFilter
 
+
+class CellExportView(ExportMixin, generics.GenericAPIView):
+    """
+    get:
+        实现导出功能，导出文件名默认download.xls,通过filename参数自定义文件名
+        过滤参数按需填写，默认全量导出
+    """
+    queryset = CellsInfo.objects.all()
+    serializer_class = CellsInfoSerializer
+
+    resource_class = CellResource
+    filter_backends = (DjangoFilterBackend,)
+    filter_class = CellsInfoFilter

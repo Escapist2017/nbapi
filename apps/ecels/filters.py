@@ -22,6 +22,7 @@ class CellsInfoFilter(filters.FilterSet):
     """
     小区信息过滤类
     """
+    city = filters.CharFilter(field_name="city", help_text = '区县过滤')
     common_site_name = filters.CharFilter(field_name="common_site_name", help_text = '共站名过滤')
     site_name = filters.CharFilter(field_name="common_site_name", help_text='基站名过滤')
     sector = filters.CharFilter(field_name="sector", help_text='扇区名过滤')
@@ -32,7 +33,7 @@ class CellsInfoFilter(filters.FilterSet):
 
     class Meta:
         model = CellsInfo
-        fields = ['common_site_name','site_name', 'sector', 'cell_name', 'site_id', 'enbid', 'eci']
+        fields = ['city','common_site_name','site_name', 'sector', 'cell_name', 'site_id', 'enbid', 'eci']
 
 
 class CellsLevelSearchFilter(SearchFilter):

@@ -47,3 +47,5 @@ class CellsTypeSerializer(serializers.ModelSerializer):
         model = CellsLevel
         # fields = "__all__"
         fields = ['name', 'level_type']
+
+
