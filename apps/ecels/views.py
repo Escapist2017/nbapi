@@ -36,10 +36,6 @@ class CellsLevelViewSet(mixins.ListModelMixin,mixins.RetrieveModelMixin, viewset
     # 过滤及搜索
     filter_backends = (DjangoFilterBackend, CellsLevelSearchFilter)
     filter_class = CellsLevelFilter
-    search_fields = ('=name', '=sub_lev__name',
-                     '=sub_lev__sub_lev__sub_cells__cell_name',
-                     '=sub_lev__sub_lev__sub_cells__enbid',
-                     '=sub_lev__sub_lev__sub_cells__eci')  # 实现多级层级查询
     # 分页
     pagination_class = CellsPagination
     # lookup_field =
@@ -59,7 +55,6 @@ class CellsTypeViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     # 过滤及搜索
     filter_backends = (DjangoFilterBackend, CellsTypeSearchFilter)
     filter_class = CellsLevelFilter
-    search_fields = ('name',)
     # 分页
     pagination_class = CellsPagination
     # 自定义详情查询(默认的”pk”来查询模型类对象) url/id

@@ -41,16 +41,20 @@ class CellsLevelSearchFilter(SearchFilter):
     """
     自定义SearchFilter
     """
-#     search_fields = ('=name', '=sub_lev__name',
-#                      '=sub_lev__sub_lev__sub_cells__cell_name',
-#                      '=sub_lev__sub_lev__sub_cells__enbid',
-#                      '=sub_lev__sub_lev__sub_cells__eci')  # 实现多级层级查询
     search_description = ("共站名、基站名、小区名、eNBID、ECI的搜索")
+    def get_search_fields(self, view, request):
+        search_fields = ('=name', '=sub_lev__name',
+                         '=sub_lev__sub_lev__sub_cells__cell_name',
+                         '=sub_lev__sub_lev__sub_cells__enbid',
+                         '=sub_lev__sub_lev__sub_cells__eci')  # 实现多级层级查询
+        return search_fields
 
 
 class CellsTypeSearchFilter(SearchFilter):
     """
     自定义SearchFilter
     """
-    # search_fields = ('name',)
     search_description = ("共站名、基站名、小区名的模糊搜索")
+    def get_search_fields(self, view, request):
+        search_fields = ('name',)
+        return search_fields
