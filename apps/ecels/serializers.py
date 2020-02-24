@@ -13,14 +13,16 @@ class CellsInfoSerializer(serializers.ModelSerializer):
         model = CellsInfo
         fields = "__all__"
 
-class CellsInfoSerializer2(serializers.ModelSerializer):
+
+class CellsInfoSerializer3(serializers.ModelSerializer):
     class Meta:
         model = CellsInfo
         # fields = "__all__"
         fields = ['city','cell_name','enbid','eci']
 
+
 class CellsLevelSerializer3(serializers.ModelSerializer):
-    sub_cells = CellsInfoSerializer2(many=True)
+    sub_cells = CellsInfoSerializer3(many=True)
     class Meta:
         model = CellsLevel
         # fields = "__all__"

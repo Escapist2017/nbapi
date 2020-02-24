@@ -59,19 +59,25 @@ class CellsTypeViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     pagination_class = CellsPagination
 
 
-class CellsDetailViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+class CellsDetailViewSet(mixins.ListModelMixin,mixins.RetrieveModelMixin,mixins.CreateModelMixin,
+                         mixins.UpdateModelMixin,mixins.DestroyModelMixin,viewsets.GenericViewSet):
     """
     list:
-        获取小区工参详细信息
+        获取所有小区的工参信息
+    retryeve:
+        获取某个小区的工参信息
+    update:
+        更新某条工参信息
+    destroy:
+        删除某条工参信息
     """
     queryset = CellsInfo.objects.all()
     serializer_class = CellsInfoSerializer
     pagination_class = CellsPagination
     # 设置认证及权限
-    authentication_classes = (JSONWebTokenAuthentication,)
-    permission_classes = (IsAuthenticated, IsOwnerOrReadOnly)
+    # authentication_classes = (JSONWebTokenAuthentication,)
+    # permission_classes = (IsAuthenticated, IsOwnerOrReadOnly)
     # 过滤及搜索
     filter_backends = (DjangoFilterBackend, )
     filter_class = CellsInfoFilter
-
 
