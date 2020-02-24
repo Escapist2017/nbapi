@@ -17,8 +17,8 @@ class CellsInfoSerializer(serializers.ModelSerializer):
 class CellsInfoSerializer3(serializers.ModelSerializer):
     class Meta:
         model = CellsInfo
-        # fields = "__all__"
-        fields = ['city','cell_name','enbid','eci']
+        fields = "__all__"
+        # fields = ['city','cell_name','enbid','eci']
 
 
 class CellsLevelSerializer3(serializers.ModelSerializer):

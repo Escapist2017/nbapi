@@ -14,9 +14,10 @@ class CellsLevelFilter(filters.FilterSet):
     共站名过滤类
     """
     name = filters.CharFilter(field_name="name", help_text='共站名过滤')
+    level_type = filters.CharFilter(field_name="level_type", help_text='共站名=1,基站名=2,小区名=4')
     class Meta:
         model = CellsLevel
-        fields = ['name',]
+        fields = ['name', 'level_type']
 
 class CellsInfoFilter(filters.FilterSet):
     """
@@ -40,10 +41,10 @@ class CellsLevelSearchFilter(SearchFilter):
     """
     自定义SearchFilter
     """
-    search_fields = ('name', 'sub_lev__name',
-                     'sub_lev__sub_lev__sub_cells__cell_name',
-                     'sub_lev__sub_lev__sub_cells__enbid',
-                     'sub_lev__sub_lev__sub_cells__eci')  # 实现多级层级查询
+#     search_fields = ('=name', '=sub_lev__name',
+#                      '=sub_lev__sub_lev__sub_cells__cell_name',
+#                      '=sub_lev__sub_lev__sub_cells__enbid',
+#                      '=sub_lev__sub_lev__sub_cells__eci')  # 实现多级层级查询
     search_description = ("共站名、基站名、小区名、eNBID、ECI的搜索")
 
 
@@ -51,5 +52,5 @@ class CellsTypeSearchFilter(SearchFilter):
     """
     自定义SearchFilter
     """
-    search_fields = ('name',)
+    # search_fields = ('name',)
     search_description = ("共站名、基站名、小区名的模糊搜索")
