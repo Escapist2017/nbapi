@@ -5,7 +5,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets,generics
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from .models import CellsLevel, CellsInfo
 from .filters import CellsLevelFilter,CellsInfoFilter,CellsLevelSearchFilter,CellsTypeSearchFilter
 from .serializers import CellsLevelSerializer, CellsInfoSerializer, CellsTypeSerializer
@@ -31,8 +31,8 @@ class CellsLevelViewSet(mixins.ListModelMixin,mixins.RetrieveModelMixin, viewset
     queryset = CellsLevel.objects.filter(level_type=1)
     serializer_class = CellsLevelSerializer
     # 设置认证及权限
-    authentication_classes = (JSONWebTokenAuthentication,)
-    permission_classes = (IsAuthenticated, IsOwnerOrReadOnly)
+    # authentication_classes = (JSONWebTokenAuthentication,)
+    # permission_classes = (IsAuthenticated, IsOwnerOrReadOnly)
     # 过滤及搜索
     filter_backends = (DjangoFilterBackend, CellsLevelSearchFilter)
     filter_class = CellsLevelFilter
@@ -76,8 +76,8 @@ class CellsDetailViewSet(mixins.ListModelMixin,mixins.RetrieveModelMixin,mixins.
     serializer_class = CellsInfoSerializer
     pagination_class = CellsPagination
     # 设置认证及权限
-    # authentication_classes = (JSONWebTokenAuthentication,)
-    # permission_classes = (IsAuthenticated, IsOwnerOrReadOnly)
+    authentication_classes = (JSONWebTokenAuthentication,)
+    permission_classes = (IsAuthenticated, IsOwnerOrReadOnly, IsAdminUser)
     # 过滤及搜索
     filter_backends = (DjangoFilterBackend, )
     filter_class = CellsInfoFilter

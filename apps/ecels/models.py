@@ -18,11 +18,10 @@ class CellsLevel(models.Model):
     # 设置目录树的级别
     level_type = models.IntegerField(choices=LEVEL_TYPE, verbose_name="类目级别", help_text="类目级别")
     # 设置models有一个指向自己的外键
+    add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
     parent_level = models.ForeignKey("self", on_delete=models.CASCADE,
                                         null=True, blank=True, verbose_name="父级别",
                                         help_text="父级别",related_name="sub_lev")
-    add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
-
     class Meta:
         # unique_together = (("name", "code", "level_type", "parent_level"),)
         verbose_name = "共站树 "
@@ -75,3 +74,23 @@ class CellsInfo(models.Model):
 
     def __str__(self):
         return self.cell_name
+
+
+class CellsGui(models.Model):
+    """
+    小区多边形信息
+    """
+    cell_name = models.CharField(default="", max_length=50, verbose_name="小区名", help_text="小区名")
+    polygon_info = models.TextField(default="", verbose_name="多边形顶点", help_text="多边形顶点")
+    color = models.CharField(default="", max_length=10, verbose_name="颜色", help_text="颜色")
+    add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
+    parent_level = models.ForeignKey(CellsInfo, on_delete=models.CASCADE,
+                                     null=True, blank=True, verbose_name="父级别",
+                                     help_text="父级别", related_name="sub_gui")
+
+    class Meta:
+        verbose_name = "小区界面描述"
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.name

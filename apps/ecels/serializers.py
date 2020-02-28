@@ -6,7 +6,12 @@
 # @notice ：
 
 from rest_framework import serializers
-from .models import CellsLevel, CellsInfo
+from .models import CellsLevel, CellsInfo, CellsGui
+
+class CellsGuiSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CellsGui
+        fields = ["polygon_info","color"]
 
 class CellsInfoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -15,6 +20,7 @@ class CellsInfoSerializer(serializers.ModelSerializer):
 
 
 class CellsInfoSerializer3(serializers.ModelSerializer):
+    sub_gui = CellsGuiSerializer(many=True)
     class Meta:
         model = CellsInfo
         fields = "__all__"
