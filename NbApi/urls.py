@@ -1,4 +1,5 @@
 
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib import admin
 import xadmin
 from django.urls import path, re_path, include
@@ -29,3 +30,5 @@ urlpatterns = [
     path('', include(router.urls)),
     path('cellexport',CellExportView.as_view(), name='cellexport')
 ]
+
+urlpatterns += staticfiles_urlpatterns()

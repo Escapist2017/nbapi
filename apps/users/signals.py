@@ -11,9 +11,10 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-@receiver(post_save, sender=User)
-def create_user(sender, instance=None, created=False, **kwargs):
-    if created:
-        password = instance.password
-        instance.set_password(password)
-        instance.save()
+# 加了这个 导致 create superuser 的时候加密两次！！！
+# @receiver(post_save, sender=User)
+# def create_user(sender, instance=None, created=False, **kwargs):
+#     if created:
+#         password = instance.password
+#         instance.set_password(password)
+#         instance.save()

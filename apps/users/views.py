@@ -11,13 +11,15 @@ from rest_framework import permissions, authentication
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from .serializers import SmsSerializer, UserRegSerializer, UserDetailSerializer
 from utils.yunpian import YunPian
+from utils.sendEmail import SendEmail
 from NbApi.settings import APIKEY
 from .models import VerifyCode
 # 但是当第三方模块根本不知道你的user model在哪里如何导入呢
 from django.contrib.auth import get_user_model
+from .models import UserProfile
 
 
-User = get_user_model()
+User = UserProfile
 
 
 class CustomBackend(ModelBackend):
@@ -29,9 +31,11 @@ class CustomBackend(ModelBackend):
             user = User.objects.get(
                 Q(username=username) | Q(mobile=username)
             )
+            print(username)
+            print(password)
+            print(user.check_password(password))
             if user.check_password(password):
                 return user
-            return user # 需要增加一行，不然xadmin有可能上不去
         except Exception as e:
             return None
 
@@ -47,7 +51,7 @@ class SmsCodeViewset(mixins.CreateModelMixin, viewsets.GenericViewSet):
         """
         seeds = "1234567890"
         random_str = []
-        for i in range(4):
+        for i in range(6):
             random_str.append(choice(seeds))
 
         return "".join(random_str)
@@ -56,22 +60,36 @@ class SmsCodeViewset(mixins.CreateModelMixin, viewsets.GenericViewSet):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        mobile = serializer.validated_data["mobile"]
-
-        yun_pian = YunPian(APIKEY)
+        # mobile = serializer.validated_data["mobile"]
+        email = serializer.validated_data["email"]
         code = self.generate_code()
-        sms_status = yun_pian.send_sms(code=code, mobile=mobile)
 
-        if sms_status["code"] != 0:
+        # yun_pian = YunPian(APIKEY)
+
+        # sms_status = yun_pian.send_sms(code=code, mobile=mobile)
+
+        # if sms_status["code"] != 0:
+        #     return Response({
+        #         "mobile": sms_status["msg"]
+        #     }, status=status.HTTP_400_BAD_REQUEST)
+        # else:
+        #     code_record = VerifyCode(code=code, mobile=mobile)
+        #     code_record.save()
+        #     return Response({
+        #         "mobile": mobile
+        #     }, status=status.HTTP_201_CREATED)
+        email_res = SendEmail().send_email(code=code, email=email)
+        if email_res["code"] != 0:
             return Response({
-                "mobile": sms_status["msg"]
+                "email": email_res["msg"]
             }, status=status.HTTP_400_BAD_REQUEST)
         else:
-            code_record = VerifyCode(code=code, mobile=mobile)
+            code_record = VerifyCode(code=code, email=email)
             code_record.save()
             return Response({
-                "mobile": mobile
+                "email": email
             }, status=status.HTTP_201_CREATED)
+
 
 class UserViewset(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     """
@@ -108,7 +126,7 @@ class UserViewset(mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.Retri
         re_dict = serializer.data
         payload = jwt_payload_handler(user)
         re_dict["token"] = jwt_encode_handler(payload)
-        re_dict["name"] = user.name if user.name else user.username
+        # re_dict["name"] = user.name if user.name else user.username
 
         headers = self.get_success_headers(serializer.data)
         return Response(re_dict, status=status.HTTP_201_CREATED, headers=headers)

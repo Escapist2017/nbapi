@@ -35,8 +35,9 @@ class VerifyCode(models.Model):
     """
     短信验证码,回填验证码进行验证。可以保存在redis中
     """
-    code = models.CharField(max_length=10, verbose_name="验证码")
+    code = models.CharField(max_length=10, verbose_name="验证码", help_text="验证码")
     mobile = models.CharField(max_length=11, verbose_name="电话", help_text="电话号码")
+    email = models.EmailField(max_length=19, verbose_name="邮箱", help_text="邮箱")
     add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
 
     class Meta:
